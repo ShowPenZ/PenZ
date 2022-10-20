@@ -13,13 +13,13 @@ function createElement(type, config, children) {
   let key; // 子元素的key唯一标识
 
   if (config) {
-    delete config._source; // 删除暂时没用的属性 source：bable编译时产生的属性
-    delete config._self;
-    delete config._owner;
+    // delete config._source; // 删除暂时没用的属性 source：bable编译时产生的属性
+    // delete config._self;
+    // delete config._owner;
     ref = config.ref;
     key = config.key;
-    delete config.ref;
-    delete config.key;
+    // delete config.ref;
+    // delete config.key;
   }
 
   // 克隆配置到props

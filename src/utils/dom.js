@@ -12,4 +12,14 @@ function wrapToVDOM(children) {
     : children;
 }
 
+// function streamlineVDOM(VDOM) {
+//   console.log(VDOM);
+//   let newVDOM = _.cloneDeep(VDOM);
+//   if (newVDOM) {
+//     delete newVDOM._self;
+//   }
+
+//   return newVDOM;
+// }
+
 export { wrapToVDOM };

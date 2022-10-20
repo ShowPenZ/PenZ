@@ -30,8 +30,23 @@ import PenZDOM from "./core/PenZDom";
 // );
 
 // 制造jsx语法的title组件会被babel转译成React.createElement()方法
-const title = <h1 className="title">123</h1>;
-console.log(title)
+function Title(props) {
+  return PenZ.createElement(
+    "h2",
+    {
+      className: "title",
+      style: {
+        color: "red",
+      },
+    },
+    props.title,
+    PenZ.createElement("h1", null, "dididi")
+  );
+}
+
+let element = <Title title="我是标题" />;
+
+console.log(element);
 // ReactDOM.render用来渲染元素
 // 把虚拟的react element变成真实DOM节点渲染到到容器内(根节点)
-PenZDOM.render(title, document.getElementById("root"));
+PenZDOM.render(element, document.getElementById("root"));

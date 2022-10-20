@@ -1,5 +1,6 @@
 //渲染库
 import { PENZ_TEXT } from "../constant";
+import { streamlineVDOM } from "../utils/dom";
 
 /**
  * 将VDOM渲染成真实DOM插入容器
@@ -17,16 +18,21 @@ function render(VDOM, container) {
  */
 function mount(VDOM, parentDOM) {
   let realDOM;
-  if (typeof VDOM === "object") {
-    realDOM = createDOM(VDOM);
-  } else if (typeof VDOM === "string") {
+
+  if (typeof VDOM === "string") {
     // 使用jsx语法糖的函数组件中
     // 因为babel将jsx语法转译出来的文本在props.children内，
     // 所以当递归进去到最后一层拿到文本时VDOM是一个字符串
     realDOM = document.createTextNode(VDOM);
+  } else {
+    realDOM = createDOM(VDOM);
   }
 
-  parentDOM.appendChild(realDOM);
+  console.log(realDOM);
+
+  if (realDOM) {
+    parentDOM.appendChild(realDOM);
+  }
 }
 
 /**
@@ -37,12 +43,16 @@ function mount(VDOM, parentDOM) {
 function createDOM(VDOM) {
   if (!VDOM) return null; // null和undefined也是合法的dom
 
-  let { type, props } = VDOM;
+  const { type, props } = VDOM;
   let realDom; // 真实DOM
 
+  console.log(VDOM);
   if (type === PENZ_TEXT) {
     // 如果元素为PENZ_TEXT即string或number，创建文本节点
     realDom = document.createTextNode(props.content);
+  } else if (typeof type === "function") {
+    // 将函数组件剥开执行后实质还是VDOM继续返回给createDOM处理
+    return mountFnComponent(VDOM);
   } else {
     realDom = document.createElement(type);
   }
@@ -73,24 +83,33 @@ function unwrapChildren(children, parentDOM) {
 
 /**
  * 把新的属性更新到真实DOM上
- * @param {*} dom 真实DOM
+ * @param {*} DOM 真实DOM
  * @param {*} oldProps 旧的属性对象
  * @param {*} newProps 新的属性对象
  */
-function updateProps(dom, oldProps, newProps) {
+function updateProps(DOM, oldProps, newProps) {
   for (let property in newProps) {
     if (property === "children") {
       continue; // 子节点先跳过
     } else if (property === "style") {
       let styleProperty = newProps[property];
       for (let attr in styleProperty) {
-        dom.style[attr] = styleProperty[attr];
+        DOM.style[attr] = styleProperty[attr];
       }
     } else if (property === "className") {
-      dom[property] = newProps[property];
+      DOM[property] = newProps[property];
     }
   }
 }
+
+function mountFnComponent(VDOM) {
+  const { type, props } = VDOM;
+  // type 是function props是参数
+  let newVDOM = type(props);
+
+  return createDOM(newVDOM);
+}
+
 const PenZDOM = { render };
 
 export default PenZDOM;
