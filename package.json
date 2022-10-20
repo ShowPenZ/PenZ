@@ -4,9 +4,8 @@
   "private": true,
   "scripts": {
     "build": "craco build",
-    "eject": "cross-env DISABLE_NEW_JSX_TRANSFORM=true react-scripts eject",
     "start": "craco start",
-    "test": "cross-env DISABLE_NEW_JSX_TRANSFORM=true react-scripts test"
+    "test": "craco test"
   },
   "browserslist": {
     "production": [
