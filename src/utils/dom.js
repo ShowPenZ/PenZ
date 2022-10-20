@@ -1,4 +1,4 @@
-import { PENZ_TEXT } from "./constant";
+import { PENZ_TEXT } from "../constant";
 
 /**
  * @desc 如果childen类型为字符串或者数字则返回type为PENZ_TEXT类型的对象

@@ -1,5 +1,5 @@
 //渲染库
-import { PENZ_TEXT } from "./constant";
+import { PENZ_TEXT } from "../constant";
 
 /**
  * 将VDOM渲染成真实DOM插入容器

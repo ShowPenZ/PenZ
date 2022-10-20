@@ -14,8 +14,8 @@
 
 //=========PenZ==========
 
-import PenZ from "./PenZ";
-import PenZDOM from "./PenZDom";
+import PenZ from "./core/PenZ";
+import PenZDOM from "./core/PenZDom";
 
 // const title = PenZ.createElement(
 //   "h2",
