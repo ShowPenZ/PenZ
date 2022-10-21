@@ -28,8 +28,6 @@ function mount(VDOM, parentDOM) {
     realDOM = createDOM(VDOM);
   }
 
-  console.log(realDOM);
-
   if (realDOM) {
     parentDOM.appendChild(realDOM);
   }
@@ -46,13 +44,17 @@ function createDOM(VDOM) {
   const { type, props } = VDOM;
   let realDom; // 真实DOM
 
-  console.log(VDOM);
   if (type === PENZ_TEXT) {
     // 如果元素为PENZ_TEXT即string或number，创建文本节点
     realDom = document.createTextNode(props.content);
   } else if (typeof type === "function") {
-    // 将函数组件剥开执行后实质还是VDOM继续返回给createDOM处理
-    return mountFnComponent(VDOM);
+    //根据类里的static中的isPenZClassComponent属性来判断是否为类组件
+    if (type.isPenZClassComponent) {
+      return mountClassComponent(VDOM);
+    } else {
+      // 将函数组件剥开执行后实质还是VDOM继续返回给createDOM处理
+      return mountFnComponent(VDOM);
+    }
   } else {
     realDom = document.createElement(type);
   }
@@ -92,21 +94,31 @@ function updateProps(DOM, oldProps, newProps) {
     if (property === "children") {
       continue; // 子节点先跳过
     } else if (property === "style") {
+      // 挂载style属性
       let styleProperty = newProps[property];
       for (let attr in styleProperty) {
         DOM.style[attr] = styleProperty[attr];
       }
     } else if (property === "className") {
+      // 挂载class属性
       DOM[property] = newProps[property];
     }
   }
 }
 
 function mountFnComponent(VDOM) {
-  const { type, props } = VDOM;
-  // type 是function props是参数
-  let newVDOM = type(props);
+  const { type: FnComponent, props } = VDOM;
+  // type是Function props是参数
+  let newVDOM = FnComponent(props);
 
+  return createDOM(newVDOM);
+}
+
+function mountClassComponent(VDOM) {
+  const { type: ClassComponent, props } = VDOM;
+  const instance = new ClassComponent(props);
+  // 将类里定义好的render方法内部的VDOM提出
+  const newVDOM = instance.render();
   return createDOM(newVDOM);
 }
 

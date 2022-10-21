@@ -1,6 +1,7 @@
 //核心库
 
-const { wrapToVDOM } = require("../utils/dom");
+import { wrapToVDOM } from "../utils/dom";
+import { Component } from "@/core/component";
 
 /**
  * @desc 创建一个虚拟DOM
@@ -39,6 +40,7 @@ function createElement(type, config, children) {
 }
 const PenZ = {
   createElement,
+  Component
 };
 
 export default PenZ;
