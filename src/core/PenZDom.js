@@ -1,6 +1,6 @@
 //渲染库
 import { PENZ_TEXT } from "../constant";
-import { streamlineVDOM } from "../utils/dom";
+import { wrapToVDOM } from "../utils/dom";
 
 /**
  * 将VDOM渲染成真实DOM插入容器
@@ -17,16 +17,7 @@ function render(VDOM, container) {
  * @param {*} parentDOM 父级容器
  */
 function mount(VDOM, parentDOM) {
-  let realDOM;
-
-  if (typeof VDOM === "string") {
-    // 使用jsx语法糖的函数组件中
-    // 因为babel将jsx语法转译出来的文本在props.children内，
-    // 所以当递归进去到最后一层拿到文本时VDOM是一个字符串
-    realDOM = document.createTextNode(VDOM);
-  } else {
-    realDOM = createDOM(VDOM);
-  }
+  let realDOM = createDOM(VDOM);
 
   if (realDOM) {
     parentDOM.appendChild(realDOM);
@@ -64,11 +55,11 @@ function createDOM(VDOM) {
     updateProps(realDom, {}, props);
     if (props.children) {
       let children = props.children;
+      // 将纯文本(number,string)转成含有标记(PENZ_TEXT)的对象
+      // 这样children就只有数组和对象两种
+      children = wrapToVDOM(children);
 
-      if (
-        (typeof children === "object" && children.type) ||
-        typeof children === "string"
-      ) {
+      if (typeof children === "object" && children.type) {
         mount(children, realDom);
       } else if (Array.isArray(children)) {
         unwrapChildren(props.children, realDom);
@@ -80,7 +71,7 @@ function createDOM(VDOM) {
 }
 
 function unwrapChildren(children, parentDOM) {
-  children.forEach((children) => mount(children, parentDOM));
+  children.forEach((children) => mount(wrapToVDOM(children), parentDOM));
 }
 
 /**
@@ -99,7 +90,7 @@ function updateProps(DOM, oldProps, newProps) {
       for (let attr in styleProperty) {
         DOM.style[attr] = styleProperty[attr];
       }
-    } else if (property === "className") {
+    } else {
       // 挂载class属性
       DOM[property] = newProps[property];
     }
