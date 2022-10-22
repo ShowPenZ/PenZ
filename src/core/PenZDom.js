@@ -67,6 +67,9 @@ function createDOM(VDOM) {
     }
   }
 
+  // 给虚拟dom添加storedRealDom属性并挂上真实dom
+  VDOM.storedRealDom = realDom;
+
   return realDom;
 }
 
@@ -90,6 +93,9 @@ function updateProps(DOM, oldProps, newProps) {
       for (let attr in styleProperty) {
         DOM.style[attr] = styleProperty[attr];
       }
+    } else if (/^on[A-Z].*/.test(property)) {
+      // 挂载onXXX 事件函数
+      DOM[property.toLowerCase()] = newProps[property];
     } else {
       // 挂载class属性
       DOM[property] = newProps[property];
@@ -109,8 +115,23 @@ function mountClassComponent(VDOM) {
   const { type: ClassComponent, props } = VDOM;
   const instance = new ClassComponent(props);
   // 将类里定义好的render方法内部的VDOM提出
-  const newVDOM = instance.render();
+  let newVDOM = instance.render();
+  // 给实例挂上oldVDOM用作保存VDOM状态，为组件更新所用
+  instance.oldVDOM = newVDOM;
+
   return createDOM(newVDOM);
+}
+
+/**
+ * @desc 在父级dom中把旧的子级DOM替换成新的子级DOM
+ */
+export function refreshDOM(parentDOM, oldVDOM, newVDOM) {
+  // 拿取存在oldVDOM中的storedRealDom
+  const oldStoredRealDOM = oldVDOM.storedRealDom;
+  // 获取新的真实DOM
+  const newRealDOM = createDOM(newVDOM);
+  // 将老的真实DOM替换为新的真实DOM
+  parentDOM.replaceChild(newRealDOM, oldStoredRealDOM);
 }
 
 const PenZDOM = { render };

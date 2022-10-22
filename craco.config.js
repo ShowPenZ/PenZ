@@ -1,5 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
+const rewireBabelLoader = require("craco-babel-loader-plugin");
 
 module.exports = {
   style: {},
@@ -8,43 +9,33 @@ module.exports = {
       "@": path.resolve(__dirname, "src/"),
     },
     configure: {
-      resolve: {
-        fallback: {
-          // assert: require.resolve('assert'),
-          // buffer: require.resolve('buffer'),
-          // crypto: require.resolve('crypto-browserify'),
-          // http: require.resolve('stream-http'),
-          // https: require.resolve('https-browserify'),
-          // os: require.resolve('os-browserify/browser'),
-          // process: require.resolve('process/browser'),
-          // stream: require.resolve('stream-browserify'),
-          // url: require.resolve('url'),
-          // util: require.resolve('util'),
-          // zlib: require.resolve('browserify-zlib'),
-        },
-      },
-      ignoreWarnings: [
-        function ignoreSourcemapsloaderWarnings(warning) {
-          return (
-            warning.module &&
-            warning.module.resource.includes("node_modules") &&
-            warning.details &&
-            warning.details.includes("source-map-loader")
-          );
-        },
-      ],
+      resolve: {},
+
       plugins: [
         new webpack.ProvidePlugin({
           process: "process/browser",
           Buffer: ["buffer", "Buffer"],
         }),
       ],
+      optimization: {
+        minimize: false,
+      },
     },
   },
   babel: {
-    Plugin: [
-      ["@babel/plugin-proposal-decorators", { legacy: true }],
-      ["@babel/plugin-transform-react-jsx", { pragma: "PenZ.createElement" }],
+    presets: [
+      [
+        "@babel/preset-react",
+        {
+          pragma: "PenZ.createElement", // default pragma is React.createElement (only in classic runtime)
+        },
+      ],
     ],
   },
+  plugins: [
+    {
+      plugin: rewireBabelLoader,
+      options: {},
+    },
+  ],
 };
