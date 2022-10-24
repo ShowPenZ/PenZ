@@ -6,7 +6,7 @@
     "build": "webpack build",
     "start": "webpack serve --mode=development",
     "start-craco": "craco start",
-    "build-craco": "craco start",
+    "build-craco": "craco build",
     "test": "craco test"
   },
   "browserslist": {
@@ -34,8 +34,8 @@
     "cross-env": "^7.0.3",
     "html-webpack-plugin": "^5.5.0",
     "process": "^0.11.10",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^16.0.2",
+    "react-dom": "^16.0.2",
     "react-router-dom": "^6.0.2",
     "react-scripts": "5.0.0",
     "sort-package-json": "^1.57.0",

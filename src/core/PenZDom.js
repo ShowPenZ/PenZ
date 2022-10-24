@@ -1,6 +1,7 @@
 //渲染库
-import { PENZ_TEXT } from "../constant";
-import { wrapToVDOM } from "../utils/dom";
+import { PENZ_TEXT } from "@/constant";
+import { wrapToVDOM } from "@/utils/dom";
+import PenZEvent from '@/core/event'
 
 /**
  * 将VDOM渲染成真实DOM插入容器
@@ -95,7 +96,10 @@ function updateProps(DOM, oldProps, newProps) {
       }
     } else if (/^on[A-Z].*/.test(property)) {
       // 挂载onXXX 事件函数
-      DOM[property.toLowerCase()] = newProps[property];
+      // DOM[property.toLowerCase()] = newProps[property];
+      // newProps[property]为onxx属性的设定的函数
+      PenZEvent.addEvent(DOM, property.toLowerCase(), newProps[property]);
+
     } else {
       // 挂载class属性
       DOM[property] = newProps[property];
