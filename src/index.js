@@ -9,25 +9,25 @@ class RenderText extends PenZ.Component {
   constructor() {
     super();
     this.a = "ShowPen";
-    this.state = {
-      count: 0,
-    };
+    this.state = { number: 0, title: "计数器" };
   }
 
   handleClick1 = (event) => {
-    // console.log(event, "parent");
-    // console.log(event.currentTarget,'---parentEvent')
-    // console.log(event.target,'---parentEvent')
-
     console.log("handleParentClick");
   };
 
   handleClick = (event) => {
-    event.preventDefault();
     event.stopPropagation();
-    // console.log(event, "childEvent");
-    // console.log(event.currentTarget,'---childEvent')
-    // console.log(event.target,'---childEvent')
+    this.setState({ number: this.state.number + 1 });
+    console.log(this.state);
+    this.setState({ number: this.state.number + 1 });
+    console.log(this.state);
+    setTimeout(() => {
+      this.setState({ number: this.state.number + 1 });
+      console.log(this.state);
+      this.setState({ number: this.state.number + 1 });
+      console.log(this.state);
+    });
 
     console.log("handleChildClick");
   };
@@ -40,6 +40,7 @@ class RenderText extends PenZ.Component {
         <img
           style={{ width: "300px", height: "300px" }}
           src="https://showpenz.github.io/images/avatar.jpg"
+          alt=""
         />
         <div onClick={this.handleClick1}>
           <span>{count}</span>
@@ -57,10 +58,5 @@ class RenderText extends PenZ.Component {
   }
 }
 
-function Title(props) {
-  return <div>{props.title}</div>;
-}
-
-// let element = <Title title="123" />;
 
 PenZDOM.render(<RenderText />, document.getElementById("root"));

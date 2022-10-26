@@ -1,3 +1,5 @@
+import { updateQueue } from "@/core/component";
+
 /**
  * @desc 事件绑定函数
  * @param {*} DOM 事件绑定的元素本体
@@ -24,6 +26,9 @@ function dispatchEvent(event) {
   let { target, type } = event;
   const eventType = `on${type}`;
 
+  // 这里将react自身执行onxxx事件的方法都加入updateQueue.isBatchingUpdate为true
+  // 意味着在onxxx事件内部调用setState会加入批量更新
+  updateQueue.isBatchingUpdate = true;
   // 创建合成事件
   const syntheticEvent = createSyntheticEvent(event);
 
@@ -40,8 +45,12 @@ function dispatchEvent(event) {
     }
 
     // 一层一层向上冒泡直至document
-    target = target.parentNode; 
+    target = target.parentNode;
   }
+
+  // 执行批量更新batchUpdate
+  // updateQueue.isBatchingUpdate = false;
+  updateQueue.batchUpdate();
 }
 
 class SyntheticEvent {

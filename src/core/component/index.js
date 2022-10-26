@@ -1,5 +1,20 @@
 import { refreshDOM } from "../PenZDom";
 
+export const updateQueue = {
+  // 控制同步更新和异步更新
+  isBatchingUpdate: false,
+  // 记录异步更新的容器
+  updaters: [],
+  // 批量更新
+  batchUpdate() {
+    updateQueue.updaters.forEach((updater) => updater.updateComponent());
+    // 执行完批量更新后将标识位置为false
+    updateQueue.isBatchingUpdate = false;
+    // 清空updates容器
+    updateQueue.updaters.length = 0;
+  },
+};
+
 class Updater {
   constructor(props) {
     //保存当前实例
@@ -10,6 +25,7 @@ class Updater {
 
   addState(state) {
     this.stateCollector.push(state);
+
     // 发送更新
     this.emitUpdate();
   }
@@ -32,7 +48,13 @@ class Updater {
   }
 
   emitUpdate() {
-    this.updateComponent();
+    // 批量更新模式
+    if (updateQueue.isBatchingUpdate) {
+      // 批量更新为异步，先存入数组
+      updateQueue.updaters.push(this);
+    } else {
+      this.updateComponent();
+    }
   }
 
   updateComponent() {
