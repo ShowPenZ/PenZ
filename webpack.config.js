@@ -21,7 +21,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         // use 是 loader的别名
         use: {
           loader: "babel-loader",
@@ -30,8 +30,7 @@ module.exports = {
               [
                 "@babel/preset-react",
                 {
-                  pragma: "PenZ.createElement", 
-                //   throwIfNamespace: false,
+                  pragma: "PenZ.createElement", //  Babel 在转换 JSX 时使用哪个函数来创建虚拟 DOM 元素的
                 },
               ],
             ],

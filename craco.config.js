@@ -27,7 +27,7 @@ module.exports = {
       [
         "@babel/preset-react",
         {
-          pragma: "PenZ.createElement", // default pragma is React.createElement (only in classic runtime)
+          pragma: "PenZ.createElement", //  Babel 在转换 JSX 时使用哪个函数来创建虚拟 DOM 元素的
         },
       ],
     ],

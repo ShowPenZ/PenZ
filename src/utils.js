@@ -1,4 +1,4 @@
-import { PENZ_TEXT } from "../constant";
+import { PENZ_TEXT } from "./constant";
 
 /**
  * @desc 如果childen类型为字符串或者数字则返回type为PENZ_TEXT类型的对象
@@ -11,15 +11,5 @@ function wrapToVDOM(children) {
     ? { type: PENZ_TEXT, props: { content: children } }
     : children;
 }
-
-// function streamlineVDOM(VDOM) {
-//   console.log(VDOM);
-//   let newVDOM = _.cloneDeep(VDOM);
-//   if (newVDOM) {
-//     delete newVDOM._self;
-//   }
-
-//   return newVDOM;
-// }
 
 export { wrapToVDOM };
