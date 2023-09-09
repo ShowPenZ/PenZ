@@ -1,5 +1,5 @@
 //渲染库
-import { PENZ_TEXT } from "./constant";
+import { PENZ_TEXT } from "../constant";
 
 /**
  * 这里是简化的render方法，render方法还需要考虑线程的阻塞问题
@@ -40,6 +40,9 @@ function createDOM(VDOM) {
   if (type === PENZ_TEXT) {
     // 如果元素为PENZ_TEXT即string或number，创建文本节点
     realDom = document.createTextNode(props.content);
+  } else if (typeof type === "function") {
+    // 函数组件的React元素
+    return mountFunctionComponent(VDOM);
   } else {
     realDom = document.createElement(type);
   }
@@ -61,6 +64,13 @@ function createDOM(VDOM) {
   }
 
   return realDom;
+}
+
+function mountFunctionComponent(VDOM) {
+  const { type, props } = VDOM;
+  const renderVdom = type(props);
+
+  return createDOM(renderVdom);
 }
 
 function unwrapChildren(children, parentDOM) {

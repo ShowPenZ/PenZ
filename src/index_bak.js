@@ -1,6 +1,6 @@
 //=========PenZ==========
 
-import PenZ from "./PenZ";
+import PenZ from "./core/PenZ";
 import PenZDOM from "./PenZDom";
 
 // const title = PenZ.createElement(
