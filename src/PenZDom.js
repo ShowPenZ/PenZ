@@ -20,14 +20,10 @@ function render(VDOM, container) {
  * @param {*} parentDOM 父级容器
  */
 function mount(VDOM, parentDOM) {
-  let realDOM = null;
-  if (typeof VDOM === "object") {
-    realDOM = createDOM(VDOM);
-  } else if (typeof VDOM === "string") {
-    realDOM = document.createTextNode(VDOM);
+  const newDOM = createDOM(VDOM);
+  if (newDOM) {
+    parentDOM.appendChild(newDOM);
   }
-
-  parentDOM.appendChild(realDOM);
 }
 
 /**
