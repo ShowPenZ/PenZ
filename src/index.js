@@ -11,13 +11,14 @@ import PenZDOM from "./PenZDom";
 //       color: "red",
 //     },
 //   },
-//   "hello1122 world",
+//   "hello world",
 //   PenZ.createElement("div", null, "qq"),
 //   PenZ.createElement("h1", null, "dididi")
 // );
 
 // jsx语法的title组件被babel用PenZ.createElement函数转译成vdom
-const title = <h1 className="title">123</h1>;
+// const title = 'gerkgeporkgpo';
+const title = <h1 className="h1">hello world<div className="content">2324234</div></h1>
 // 被babel转成 {
 // props : {
 //     children:{type: ..., props: ...},

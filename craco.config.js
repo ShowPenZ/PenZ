@@ -26,9 +26,9 @@ module.exports = {
     presets: [
       [
         "@babel/preset-react",
-        {
-          pragma: "PenZ.createElement", //  Babel 在转换 JSX 时使用哪个函数来创建虚拟 DOM 元素的
-        },
+        // {
+        //   pragma: "PenZ.createElement", //  Babel 在转换 JSX 时使用哪个函数来创建虚拟 DOM 元素的
+        // },
       ],
     ],
   },

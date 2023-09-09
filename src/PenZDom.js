@@ -1,12 +1,11 @@
 //渲染库
 import { PENZ_TEXT } from "./constant";
 
-
-
-// 这里是简化的render方法，render方法还需要考虑线程的阻塞问题
-// render 方法中执行大量计算密集型操作或阻塞操作时，会影响到主线程的执行，例如阻塞用户界面响应，降低应用性能
-
 /**
+ * 这里是简化的render方法，render方法还需要考虑线程的阻塞问题
+ * render 方法中执行大量计算密集型操作或阻塞操作时，会影响到主线程的执行，
+ * 例如阻塞用户界面响应，降低应用性能
+ *
  * 将VDOM渲染成真实DOM插入容器
  * @param {*} VDOM 虚拟DOM
  * @param {*} container 容器
@@ -21,13 +20,10 @@ function render(VDOM, container) {
  * @param {*} parentDOM 父级容器
  */
 function mount(VDOM, parentDOM) {
-  let realDOM;
-  if (Object.prototype.toString.call(VDOM) === "[object Object]") {
+  let realDOM = null;
+  if (typeof VDOM === "object") {
     realDOM = createDOM(VDOM);
-  } else if (Object.prototype.toString.call(VDOM) === "[object String]") {
-    // 使用jsx语法糖的函数组件中
-    // 因为babel将jsx语法转译出来的文本在props.children内，
-    // 所以当递归进去到最后一层拿到文本时VDOM是一个字符串
+  } else if (typeof VDOM === "string") {
     realDOM = document.createTextNode(VDOM);
   }
 
@@ -42,8 +38,8 @@ function mount(VDOM, parentDOM) {
 function createDOM(VDOM) {
   if (!VDOM) return null; // null和undefined也是合法的dom
 
-  let { type, props } = VDOM;
-  let realDom; // 真实DOM
+  const { type, props } = VDOM;
+  let realDom = null; // 真实DOM
 
   if (type === PENZ_TEXT) {
     // 如果元素为PENZ_TEXT即string或number，创建文本节点
@@ -56,8 +52,7 @@ function createDOM(VDOM) {
   if (props) {
     updateProps(realDom, {}, props);
     if (props.children) {
-      let children = props.children;
-
+      const children = props.children;
       if (
         (typeof children === "object" && children.type) ||
         typeof children === "string"
@@ -87,7 +82,7 @@ function updateProps(dom, oldProps, newProps) {
     if (property === "children") {
       continue; // 子节点先跳过
     } else if (property === "style") {
-      let styleProperty = newProps[property];
+      const styleProperty = newProps[property];
       for (let attr in styleProperty) {
         dom.style[attr] = styleProperty[attr];
       }
