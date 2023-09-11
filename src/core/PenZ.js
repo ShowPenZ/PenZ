@@ -1,6 +1,5 @@
 //核心库
-
-const { wrapToVDOM } = require("../utils");
+import { wrapToVDOM } from "../utils";
 
 /**
  * @desc 创建一个虚拟DOM
