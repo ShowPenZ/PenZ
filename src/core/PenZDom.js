@@ -1,5 +1,5 @@
 //渲染库
-import { PENZ_TEXT } from "./constant";
+import { PENZ_TEXT } from "../constant";
 
 /**
  * 这里是简化的render方法，render方法还需要考虑线程的阻塞问题
