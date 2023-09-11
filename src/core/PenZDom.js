@@ -41,8 +41,13 @@ function createDOM(VDOM) {
     // 如果元素为PENZ_TEXT即string或number，创建文本节点
     realDom = document.createTextNode(props.content);
   } else if (typeof type === "function") {
-    // 函数组件的React元素
-    return mountFunctionComponent(VDOM);
+    if (type.isReactComponent) {
+      // 说明这是一个类组件
+      return mountClassComponent(VDOM);
+    } else {
+      // 函数组件的React元素
+      return mountFunctionComponent(VDOM);
+    }
   } else {
     realDom = document.createElement(type);
   }
@@ -67,6 +72,23 @@ function mountFunctionComponent(VDOM) {
   const { type, props } = VDOM;
   const renderVdom = type(props);
 
+  return createDOM(renderVdom);
+}
+
+/**
+ * 挂载类组件
+ * @param {*} vdom
+ * @returns
+ */
+function mountClassComponent(vdom) {
+  let { type: ClassComponent, props } = vdom;
+  // 把类组件的属性传递给类组件的构造函数，
+  // 创建类组件的实例，返回组件实例对象
+  let classInstance = new ClassComponent(props);
+  //可能是原生组件的虚拟DOM，也可能是类组件的的虚拟DOM，也可能是函数组件的虚拟DOM
+  let renderVdom = classInstance.render();
+  //在第一次挂载类组件的时候让类实例上添加一个oldRenderVdom=renderVdom
+  classInstance.oldRenderVdom = renderVdom;
   return createDOM(renderVdom);
 }
 
