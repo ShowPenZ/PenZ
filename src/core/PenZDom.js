@@ -52,10 +52,7 @@ function createDOM(VDOM) {
     updateProps(realDom, {}, props);
     if (props.children) {
       const children = props.children;
-      if (
-        (typeof children === "object" && children.type) ||
-        typeof children === "string"
-      ) {
+      if (typeof children === "object" && children.type) {
         mount(children, realDom);
       } else if (Array.isArray(children)) {
         unwrapChildren(props.children, realDom);

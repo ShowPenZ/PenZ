@@ -26,6 +26,7 @@ function FuntionComponent(props) {
   // return React.createElement("h1", null, "FP:", props.title);
   return <h1 className="123">
     {props.title || 123}
+    <div>123123</div>
     <div><FuntionComponent2 title='tutu'/></div>
   </h1>;
 }
