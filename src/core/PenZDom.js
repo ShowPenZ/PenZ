@@ -45,7 +45,7 @@ function createDOM(VDOM) {
       // 说明这是一个类组件
       return mountClassComponent(VDOM);
     } else {
-      // 函数组件的React元素
+      // 函数组件
       return mountFunctionComponent(VDOM);
     }
   } else {
