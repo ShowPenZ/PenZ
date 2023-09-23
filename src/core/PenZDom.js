@@ -60,7 +60,7 @@ function createDOM(VDOM) {
       if (typeof children === "object" && children.type) {
         mount(children, realDom);
       } else if (Array.isArray(children)) {
-        unwrapChildren(props.children, realDom);
+        reconclieChildren(props.children, realDom);
       }
     }
   }
@@ -85,14 +85,14 @@ function mountClassComponent(vdom) {
   // 把类组件的属性传递给类组件的构造函数，
   // 创建类组件的实例，返回组件实例对象
   let classInstance = new ClassComponent(props);
-  //可能是原生组件的虚拟DOM，也可能是类组件的的虚拟DOM，也可能是函数组件的虚拟DOM
+  // 可能是原生组件的虚拟DOM，也可能是类组件的的虚拟DOM，也可能是函数组件的虚拟DOM
   let renderVdom = classInstance.render();
   //在第一次挂载类组件的时候让类实例上添加一个oldRenderVdom=renderVdom
   classInstance.oldRenderVdom = renderVdom;
   return createDOM(renderVdom);
 }
 
-function unwrapChildren(children, parentDOM) {
+function reconclieChildren(children, parentDOM) {
   children.forEach((children) => mount(children, parentDOM));
 }
 
